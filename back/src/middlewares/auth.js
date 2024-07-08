@@ -1,4 +1,4 @@
-const User = require("../api/models/user")
+const User = require("../api/models/users")
 const { verifyToken } = require("../utils/token")
 
 const isAuth = async (req, res, next) => {
@@ -7,14 +7,16 @@ const isAuth = async (req, res, next) => {
         const parsedToken = token.replace("Bearer ", "")
 
         const { id } = verifyToken(parsedToken)
-        const user = await User.findById(id)
-
-        user.password = null
-        req.user = user
-        next()
+        const user = await User.findById(id) 
+        
+        if(user.rol ==="admin"){
+            user.password = null
+            req.user = user
+            next()
+        }
     } catch (error) {
-        return res.status(400).json("No estas registrado")
+        return res.status(401).json("Unauthorized")
     }
-}
+} 
 
 module.exports = { isAuth }
