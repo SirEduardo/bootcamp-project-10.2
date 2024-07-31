@@ -1,0 +1,19 @@
+
+.event-list{
+    display: flex;
+    height: 90vh;
+    justify-content: center;
+    align-items: center;
+    gap: 90px;
+
+}
+
+.event-item{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5%;
+    padding: 50px 30px;
+    background-color: rgb(206, 243, 231);
+}

@@ -1,0 +1,6 @@
+#home{
+    min-height: 92svh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
