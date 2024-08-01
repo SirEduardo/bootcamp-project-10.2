@@ -4,7 +4,6 @@ import { doRegister } from "../../../utils/functions/doRegister";
 import { Button } from "../../components/Button/Button";
 import { LoginForm } from "../../components/LoginForm/loginForm";
 import { RegisterForm } from "../../components/RegisterForm/registerForm";
-import Home from "../Home/home";
 import "./login.css";
 
 let showLogin = true;
