@@ -6,3 +6,6 @@
     gap: 90px;
 
 }
+#confirm-attendance{
+    cursor: pointer;
+}

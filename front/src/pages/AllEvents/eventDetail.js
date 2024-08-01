@@ -25,12 +25,13 @@ try {
     const confirmButton = eventDetail.querySelector("#confirm-attendance")
     confirmButton.addEventListener("click", async () => {
         const token = localStorage.getItem("token")
+        const user = localStorage.getItem("user")
         if(!token) {
             alert("Necesitas estar logeado")
             return
         }
         try {
-            const res = await confirmAttendance(id, token)
+            const res = await confirmAttendance(user, token)
             console.log(res);
             if (res.error) {
                 alert(`Error al confirmar: ${res.error}`)

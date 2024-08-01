@@ -15,5 +15,26 @@
     align-items: center;
     border-radius: 5%;
     padding: 50px 30px;
-    background-color: rgb(206, 243, 231);
+    background-color: rgb(241, 210, 143);
+}
+
+.btn-div{
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+    gap: 20px;
+}
+.detail-btn{
+    cursor: pointer;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+}
+.delete-btn{
+    cursor: pointer;
+    padding: 5px 10px;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 5px;
 }

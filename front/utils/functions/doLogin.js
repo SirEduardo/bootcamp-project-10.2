@@ -1,3 +1,4 @@
+import Home from "../../src/pages/Home/home";
 import { fetchWrapper } from "../api/api";
 
 export const doLogin = async (e) => {
@@ -24,6 +25,6 @@ export const doLogin = async (e) => {
     if (dataRes.token) {
         localStorage.setItem("token", dataRes.token)
         alert("login succesfull")
+        Home()
     }
-    console.log(dataRes.user.userName);
 }

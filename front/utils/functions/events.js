@@ -19,6 +19,14 @@ export const createEvent = (event, token) => {
     })
 }
 
+export const deleteEvent = async (eventId, token) => {
+    return fetchWrapper({
+        endpoint: `/events/${eventId}`,
+        method: "DELETE",
+        token: token
+    })
+}
+
 export const confirmAttendance = (eventId, token) => {
     return fetchWrapper({
         endpoint: `/users/attendees/${eventId}`, 
