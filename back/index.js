@@ -2,12 +2,20 @@ require("dotenv").config()
 const express = require("express")
 const cors = require("cors")
 const { connectDB } = require("./src/config/db")
+const cloudinary = require("cloudinary").v2
 const eventRoutes = require("./src/api/routes/events")
 const attendeeRoutes = require("./src/api/routes/attendees")
 const authRoutes = require("./src/api/routes/auth")
 const userRoutes = require("./src/api/routes/users")
 
 const app = express()
+
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.API_KEY,
+    api_secret: process.env.API_SECRET,
+})
+
 app.use(express.json())
 app.use(cors())
 

@@ -1,6 +1,6 @@
 const { generateToken } = require("../../utils/token")
-const User = require("../models/users")
 const bcrypt = require("bcrypt")
+const User = require("../models/users")
 
 
 const registerUser = async (req, res, next) => {
@@ -9,7 +9,7 @@ const registerUser = async (req, res, next) => {
             userName: req.body.userName,
             email: req.body.email,
             password: req.body.password,
-            rol: "admin"        
+            rol: "user"        
         })
         const userExist = await User.findOne({email: req.body.email})
         if (userExist) {
@@ -24,7 +24,7 @@ const registerUser = async (req, res, next) => {
 
 const loginUser = async (req, res, next) => {
     try {
-        const user = await User.findOne({userName: req.body.userName})
+        const user = await User.findOne({email: req.body.email})
         if(!user){
             return res.status(400).json("Usuario o contraseña incorrectos")
         }
