@@ -15,7 +15,7 @@ export const createEvent = (event, token) => {
         method: "POST", 
         body: event, 
         token: token,
-        isJson: true
+        isJson: false
     })
 }
 

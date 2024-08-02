@@ -17,6 +17,9 @@
     padding: 50px 30px;
     background-color: rgb(241, 210, 143);
 }
+.event-item img{
+    width: 100px;
+}
 
 .btn-div{
     display: flex;

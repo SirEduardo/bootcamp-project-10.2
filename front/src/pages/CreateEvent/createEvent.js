@@ -6,57 +6,50 @@ import EventList from "../AllEvents/eventList";
 const CreateEvent = () => {
   const div = createPage("create-events")
   div.id = "createEvent-container"
-  const createEventForm = document.createElement("form");
 
-  const titleInpunt = document.createElement("input");
-  titleInpunt.type = "text";
-  titleInpunt.placeholder = "Title";
+  div.innerHTML = `
+    <form id="create-event">
+      <input type="text" placeholder="Title" id="title" name="title" required>
+      <input type="date" id="date" name="date" required>
+      <input type="time" id="time" name="time" required>
+      <input type="text" placeholder="Location" id="location" name="location" required>
+      <textarea placeholder="Description" id="description" name="description" required></textarea>
+      <input type="file" id="img" name="img" required>
+      <button type="submit" id="submit-btn">Create Event</button>
+    </form>
+  `;
 
-  const dateInput = document.createElement("input");
-  dateInput.type = "date";
-
-  const locationInput = document.createElement("input");
-  locationInput.type = "text";
-  locationInput.placeholder = "Location";
-
-  const descriptionInput = document.createElement("textarea");
-  descriptionInput.placeholder = "Description";
-
-  const submitButton = document.createElement("button");
-  submitButton.type = "submit";
-  submitButton.textContent = "Create Event";
-  submitButton.id = "submit-btn"
-
-  createEventForm.id = "create-event"
-  createEventForm.appendChild(titleInpunt);
-  createEventForm.appendChild(dateInput);
-  createEventForm.appendChild(locationInput);
-  createEventForm.appendChild(descriptionInput);
-  createEventForm.appendChild(submitButton)
-  
-
-  createEventForm.addEventListener("submit", async (e) => {
+  div.querySelector("#create-event").addEventListener("submit", async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
-    const response = await createEvent(
-      {
-        title: titleInpunt.value,
-        date: dateInput.value,
-        location: locationInput.value,
-        description: descriptionInput.value,
-      },
-      token
-    );
-    if (response.ok) {
-      EventList()
-    } else {
-      console.log(response);
-    }
-  });
-  div.appendChild(createEventForm)
- 
 
-};
+    const dateValue = document.querySelector("#date").value
+    const timeValue = document.querySelector("#time").value
+    const dateTime = new Date(`${dateValue}T${timeValue}`).toISOString()
+
+    const formData = new FormData();
+    formData.append("title", document.querySelector("#title").value);
+    formData.append("date", dateTime)
+    formData.append("location", document.querySelector("#location").value);
+    formData.append("description", document.querySelector("#description").value);
+    formData.append("img", document.querySelector("#img").files[0]);
+
+    try {
+      const response = await createEvent(formData, token);
+
+      if (response.ok) {
+        EventList();
+      } else {
+        const errorData = await response.json();
+        console.error('Error creating event:', errorData);
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+    }
+  })
+  return div
+}
+
 
 
 export default CreateEvent

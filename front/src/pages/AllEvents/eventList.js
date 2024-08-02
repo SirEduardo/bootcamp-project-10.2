@@ -22,6 +22,7 @@ try {
             month: 'long',
             day: 'numeric'
         })
+        
         const formattedEventTime = eventDate.toLocaleTimeString('es-ES', {
             hour: '2-digit',
             minute: '2-digit'
@@ -29,6 +30,7 @@ try {
         const eventItem = document.createElement("div")
         eventItem.className = "event-item"
         eventItem.innerHTML = `
+        <img src=${event.img} alt=${event.title}/>
         <h3>${event.title}</h3>
         <p>Dia: ${formattedEventDate}</p>
         <p>Hora: ${formattedEventTime}</p>
