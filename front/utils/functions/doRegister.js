@@ -1,4 +1,3 @@
-import Login from "../../src/pages/Login/login";
 import { fetchWrapper } from "../api/api";
 
 export const doRegister = async (e) => {
@@ -18,5 +17,6 @@ export const doRegister = async (e) => {
     body,
   });
 
-  console.log(res);
+  const response = await res.json()
+  alert(response);
 };

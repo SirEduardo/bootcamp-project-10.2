@@ -23,11 +23,14 @@ export const doLogin = async (e) => {
     const dataRes = await res.json()
     if (dataRes.user && dataRes.user.userName) {
         localStorage.setItem("user", dataRes.user.userName)
+        if (dataRes.token) {
+            localStorage.setItem("token", dataRes.token)
+            alert("login succesfull")
+            Header()
+            Home()
+        }
+    }else {
+        alert("Debes registrarte primero!")
     }
-    if (dataRes.token) {
-        localStorage.setItem("token", dataRes.token)
-        alert("login succesfull")
-        Header()
-        Home()
-    }
+
 }

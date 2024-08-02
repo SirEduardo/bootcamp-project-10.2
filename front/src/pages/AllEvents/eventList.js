@@ -57,9 +57,13 @@ try {
                 if (response.error) {
                     alert("Error al eliminar el evento")
                 }else {
-                    alert("Evento eliminado")
-                    eventItem.remove()
-                    EventList()
+                    const confirmation = confirm("Seguro que quieres eliminar este evento?")
+                    if (confirmation){
+                        alert("Evento eliminado")
+                        eventItem.remove()
+                        EventList()
+                    }
+
                 }
             } catch (error) {
                 console.log(error);
