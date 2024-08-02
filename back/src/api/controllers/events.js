@@ -1,3 +1,4 @@
+const { deleteFile } = require("../../utils/deleteFiles")
 const Event = require("../models/events")
 
 
@@ -30,6 +31,9 @@ const createEvent = async (req, res, next) => {
     try {
         const { title, date, location, description } = req.body
         const newEvent = new Event({ title, date, location, description })
+        if (req.file) {
+            newEvent.img = req.file.path
+        }
         const event = await newEvent.save()
         return res.status(201).json(event)
     } catch (error) {
@@ -41,6 +45,7 @@ const deleteEvent = async (req, res, next) => {
     try {
         const { id } = req.params
         const deletedEvent = await Event.findByIdAndDelete(id)
+        deleteFile(deletedEvent.img)
         return res.status(200).json(deletedEvent)
     } catch (error) {
         return res.status(400).json("Error al eliminar el evento")
