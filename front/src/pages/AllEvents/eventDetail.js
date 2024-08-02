@@ -11,13 +11,26 @@ try {
     const res = await getEventsById(id)
     const event = await res.json()
 
+    const eventDate = new Date(event.date)
+    const formattedEventDate = eventDate.toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    })
+    
+    const formattedEventTime = eventDate.toLocaleTimeString('es-ES', {
+        hour: '2-digit',
+        minute: '2-digit'
+    })
+
     const eventItem = document.createElement("div")
      eventItem.className = "event-item"
     eventItem.innerHTML = `
     <h1>${event.title}</h1>
-    <p>${event.date}</p>
-    <p>${event.location}</p>
-    <p>${event.description}</p>
+    <p>Dia: ${formattedEventDate}</p>
+    <p>Hora: ${formattedEventTime} H</p>
+    <p>Lugar: ${event.location}</p>
+    <p> Info: ${event.description}</p>
     <button id="confirm-attendance">Confirm Attendance</button>
     `
     eventDetail.appendChild(eventItem)

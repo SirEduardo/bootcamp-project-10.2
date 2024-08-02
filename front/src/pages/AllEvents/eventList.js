@@ -33,7 +33,7 @@ try {
         <img src=${event.img} alt=${event.title}/>
         <h3>${event.title}</h3>
         <p>Dia: ${formattedEventDate}</p>
-        <p>Hora: ${formattedEventTime}</p>
+        <p>Hora: ${formattedEventTime} H</p>
         <p>Lugar: ${event.location}</p>
         <div class="btn-div">
         <button data-id="${event._id}" class="detail-btn">View details</button>
@@ -59,7 +59,6 @@ try {
                 }else {
                     const confirmation = confirm("Seguro que quieres eliminar este evento?")
                     if (confirmation){
-                        alert("Evento eliminado")
                         eventItem.remove()
                         EventList()
                     }
