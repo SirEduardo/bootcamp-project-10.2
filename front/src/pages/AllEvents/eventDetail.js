@@ -1,30 +1,40 @@
-import { createPage } from "../../../utils/functions/createPage"
-import { confirmAttendance, getEventsById } from "../../../utils/functions/events"
-import "./eventDetail.css"
+import {
+  getAttendeeById,
+  confirmAttendance,
+  removeAttendance,
+} from "../../../utils/functions/attendees";
+import { createPage } from "../../../utils/functions/createPage";
+import { getEventsById } from "../../../utils/functions/events";
+import "./eventDetail.css";
 
 const EventDetail = async (id) => {
-    const div = createPage("events")
-    const eventDetail = document.createElement("div")
-    eventDetail.className = "event-detail"
-try {
-    
-    const res = await getEventsById(id)
-    const event = await res.json()
+  const div = createPage("events");
+  const eventDetail = document.createElement("div");
+  eventDetail.className = "event-detail";
+  try {
+    const res = await getEventsById(id);
+    const event = await res.json();
+    const token = localStorage.getItem("token");
 
-    const eventDate = new Date(event.date)
-    const formattedEventDate = eventDate.toLocaleDateString('es-ES', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    })
-    
-    const formattedEventTime = eventDate.toLocaleTimeString('es-ES', {
-        hour: '2-digit',
-        minute: '2-digit'
-    })
+    if (!token) {
+      alert("Necesitas estar logeado");
+      return;
+    }
 
-    const eventItem = document.createElement("div")
-     eventItem.className = "event-item"
+    const eventDate = new Date(event.date);
+    const formattedEventDate = eventDate.toLocaleDateString("es-ES", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+
+    const formattedEventTime = eventDate.toLocaleTimeString("es-ES", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    const eventItem = document.createElement("div");
+    eventItem.className = "event-item";
     eventItem.innerHTML = `
     <h1>${event.title}</h1>
     <p>Dia: ${formattedEventDate}</p>
@@ -32,36 +42,66 @@ try {
     <p>Lugar: ${event.location}</p>
     <p> Info: ${event.description}</p>
     <button id="confirm-attendance">Confirm Attendance</button>
-    `
-    eventDetail.appendChild(eventItem)
+    `;
+    eventDetail.appendChild(eventItem);
 
-    const confirmButton = eventDetail.querySelector("#confirm-attendance")
-    confirmButton.addEventListener("click", async () => {
-        const token = localStorage.getItem("token")
-        const user = localStorage.getItem("user")
-        if(!token) {
-            alert("Necesitas estar logeado")
-            return
-        }
-        try {
-            const res = await confirmAttendance(user, token)
-            console.log(res);
-            if (res.error) {
-                alert(`Error al confirmar: ${res.error}`)
-            } else {
-                console.log("Confirmada la asistencia")
-                localStorage.setItem("attendees", )
+    const checkAttendance = async () => {
+      try {
+        const attendeeRes = await getAttendeeById(id);
+        const attendeeData = await attendeeRes.json();
+
+        if (attendeeData.events && attendeeData.events.includes(id)) {
+          const confirmButton = eventDetail.querySelector(
+            "#confirm-attendance"
+          );
+          confirmButton.textContent = "Eliminar Asistencia";
+          confirmButton.addEventListener("click", async () => {
+            try {
+              const res = await removeAttendance(id, token);
+              if (res.error) {
+                alert(`Error al eliminar asistencia: ${res.message}`);
+              } else {
+                alert("Asistencia eliminada.");
+              }
+            } catch (error) {
+              console.log(error);
+              alert("Hubo un errror al eliminar la asistencia");
             }
-        } catch (error) {
-            console.log(error);
-        }
-    })
-} catch (error) {
-    console.log(error);
-}
-    
-    div.appendChild(eventDetail)
-    return div
-}
+          });
+        } else {
+          const confirmButton = eventDetail.querySelector(
+            "#confirm-attendance"
+          );
+          confirmButton.addEventListener("click", async () => {
+            try {
+              const res = await confirmAttendance(event._id, token);
 
-export default EventDetail
+              if (res.message === "Asistencia ya confirmada") {
+                alert("Ya has confirmado tu asistencia a este evento.");
+              } else if (res.error) {
+                alert(`Error al confirmar: ${res.message}`);
+              } else {
+                alert("Asistencia confirmada.");
+              }
+            } catch (error) {
+              console.log("Error del servidor al confirmar asistencia", error);
+            }
+          });
+        }
+      } catch (error) {
+        console.error("Error al verificar asistencia:", error);
+        alert("Hubo un error al verificar la asistencia.");
+      }
+    };
+
+    checkAttendance();
+  } catch (error) {
+    console.log(error);
+    eventDetail.innerHTML = "<p>Error al cargar los detalles del evento.</p>";
+  }
+
+  div.appendChild(eventDetail);
+  return div;
+};
+
+export default EventDetail;
