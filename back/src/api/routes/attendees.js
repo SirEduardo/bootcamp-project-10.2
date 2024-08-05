@@ -1,12 +1,13 @@
 const { isAuth } = require("../../middlewares/auth")
-const { getAttendee, getAttendeeById, confirmAttendance } = require("../controllers/attendees")
+const { getAttendees, getAttendeeById, confirmAttendance, deleteAttendance} = require("../controllers/attendees")
 
 const attendeeRoutes = require("express").Router()
 
 
-attendeeRoutes.get("/", getAttendee)
+attendeeRoutes.get("/", getAttendees)
 attendeeRoutes.get("/:id", getAttendeeById)
 attendeeRoutes.post("/:eventId", [isAuth], confirmAttendance)
+attendeeRoutes.delete("/:eventId", [isAuth], deleteAttendance)
 
 
 module.exports = attendeeRoutes

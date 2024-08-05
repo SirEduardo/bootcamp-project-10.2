@@ -1,4 +1,3 @@
-const { isAuth } = require("../../middlewares/auth")
 const { uploadEvents } = require("../../middlewares/file")
 const { getEvents, getEventsById, createEvent, deleteEvent } = require("../controllers/events")
 
