@@ -16,11 +16,6 @@ const EventDetail = async (id) => {
     const event = await res.json();
     const token = localStorage.getItem("token");
 
-    if (!token) {
-      alert("Necesitas estar logeado");
-      return;
-    }
-
     const eventDate = new Date(event.date);
     const formattedEventDate = eventDate.toLocaleDateString("es-ES", {
       year: "numeric",
@@ -36,6 +31,7 @@ const EventDetail = async (id) => {
     const eventItem = document.createElement("div");
     eventItem.className = "event-item";
     eventItem.innerHTML = `
+    <img src=${event.img} alt=${event.title}/>
     <h1>${event.title}</h1>
     <p>Dia: ${formattedEventDate}</p>
     <p>Hora: ${formattedEventTime} H</p>
@@ -75,11 +71,14 @@ const EventDetail = async (id) => {
           confirmButton.addEventListener("click", async () => {
             try {
               const res = await confirmAttendance(event._id, token);
+              const response = await res.json();
 
-              if (res.message === "Asistencia ya confirmada") {
+              if (token && response.message === "Asistencia ya confirmada") {
                 alert("Ya has confirmado tu asistencia a este evento.");
-              } else if (res.error) {
-                alert(`Error al confirmar: ${res.message}`);
+              } else if (response.error) {
+                alert(`Error al confirmar: ${response.message}`);
+              } else if (!token) {
+                alert("Necesitas estar logeado");
               } else {
                 alert("Asistencia confirmada.");
               }

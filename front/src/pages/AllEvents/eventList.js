@@ -16,6 +16,7 @@ try {
 
    if (Array.isArray(events) && events.length > 0) {
     for (const event of events) {
+        
         const eventDate = new Date(event.date)
         const formattedEventDate = eventDate.toLocaleDateString('es-ES', {
             year: 'numeric',
@@ -54,6 +55,7 @@ try {
             try {
                 const res = await deleteEvent(event._id)
                 const response = await res.json()
+                
                 if (response.error) {
                     alert("Error al eliminar el evento")
                 }else {
@@ -62,7 +64,6 @@ try {
                         eventItem.remove()
                         EventList()
                     }
-
                 }
             } catch (error) {
                 console.log(error);

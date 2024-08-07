@@ -6,8 +6,6 @@ import "./Header.css";
 export const Header = () => {
   const header = document.querySelector("header");
 
-  if (!header) return;
-
   header.innerHTML = "";
 
   const nav = document.createElement("nav");
