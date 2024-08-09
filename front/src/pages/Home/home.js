@@ -1,7 +1,9 @@
 
 import { createPage } from "../../../utils/functions/createPage"
+import { sports } from "../../components/sports/sports"
 import "./home.css"
 
+const allSports = sports
 
 const Home = () => {
     const div = createPage("home")
@@ -9,10 +11,18 @@ const Home = () => {
     <div class="text">
     <h1>Gestión de eventos deportivos Salamanca</h1>
     <section>
-    <p>Eventos deportivos grupales para diferentes niveles:</p>
+        <p>Eventos deportivos grupales para diferentes niveles:</p>
+        <ul id="sports-list"></ul>
     </section>
     </div>
     `
+    const sportsList = div.querySelector("#sports-list")
+
+    allSports.forEach(sport => {
+        const li = document.createElement("li")
+        li.textContent = sport
+        sportsList.appendChild(li)
+    })
 
 }
 
