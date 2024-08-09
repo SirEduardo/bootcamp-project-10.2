@@ -2,6 +2,7 @@ import "./eventList.css"
 import { deleteEvent, getEvents } from "../../../utils/functions/events"
 import { createPage } from "../../../utils/functions/createPage"
 import EventDetail from "./eventDetail"
+import { createLoading } from "../../components/loading/loading"
 
 const EventList = async () => {
     const div = createPage("events")
@@ -9,10 +10,13 @@ const EventList = async () => {
     eventList.className = "event-list"
     eventList.innerHTML = ""
 
+    const loadingElement = createLoading()
+
 try {
+    div.appendChild(loadingElement)
     const response = await getEvents()
     const events = await response.json()
-
+    div.removeChild(loadingElement)
 
    if (Array.isArray(events) && events.length > 0) {
     for (const event of events) {
@@ -53,9 +57,11 @@ try {
                 return
             }
             try {
+                div.appendChild(loadingElement)
                 const res = await deleteEvent(event._id)
                 const response = await res.json()
-                
+                div.removeChild(loadingElement)
+
                 if (response.error) {
                     alert("Error al eliminar el evento")
                 }else {
@@ -66,6 +72,7 @@ try {
                     }
                 }
             } catch (error) {
+                div.removeChild(loadingElement)
                 console.log(error);
             }
         })
@@ -75,6 +82,7 @@ try {
     eventList.innerHTML = "<p>No se encontraron eventos.</p>"
    }
 } catch (error) {
+    div.removeChild(loadingElement)
     eventList.innerHTML = "<p>Hubo un error cargando eventos.</p>"
     console.log(error);
 }

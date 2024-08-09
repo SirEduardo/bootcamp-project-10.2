@@ -2,10 +2,13 @@ import { createEvent } from "../../../utils/functions/events";
 import { createPage } from "../../../utils/functions/createPage";
 import "./createEvent.css";
 import EventList from "../AllEvents/eventList";
+import { createLoading } from "../../components/loading/loading";
 
 const CreateEvent = () => {
   const div = createPage("create-events")
   div.id = "createEvent-container"
+
+  const loadingElement = createLoading()
 
   div.innerHTML = `
     <form id="create-event">
@@ -35,8 +38,9 @@ const CreateEvent = () => {
     formData.append("img", document.querySelector("#img").files[0]);
 
     try {
+      div.appendChild(loadingElement)
       const response = await createEvent(formData, token);
-
+      div.removeChild(loadingElement)
       if (response.ok) {
         EventList();
       } else {
@@ -44,6 +48,7 @@ const CreateEvent = () => {
         console.error('Error creating event:', errorData);
       }
     } catch (error) {
+      div.removeChild(loadingElement)
       console.error('Network error:', error);
     }
   })

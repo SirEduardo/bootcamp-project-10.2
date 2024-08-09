@@ -5,15 +5,21 @@ import {
 } from "../../../utils/functions/attendees";
 import { createPage } from "../../../utils/functions/createPage";
 import { getEventsById } from "../../../utils/functions/events";
+import { createLoading } from "../../components/loading/loading";
 import "./eventDetail.css";
 
 const EventDetail = async (id) => {
   const div = createPage("events");
   const eventDetail = document.createElement("div");
   eventDetail.className = "event-detail";
+
+  const loadingElement = createLoading()
+  
   try {
+    div.appendChild(loadingElement)
     const res = await getEventsById(id);
     const event = await res.json();
+    div.removeChild(loadingElement)
     const token = localStorage.getItem("token");
 
     const eventDate = new Date(event.date);
@@ -43,8 +49,10 @@ const EventDetail = async (id) => {
 
     const checkAttendance = async () => {
       try {
+        div.appendChild(loadingElement)
         const attendeeRes = await getAttendeeById(id);
         const attendeeData = await attendeeRes.json();
+        div.removeChild(loadingElement)
 
         if (attendeeData.events && attendeeData.events.includes(id)) {
           const confirmButton = eventDetail.querySelector(
@@ -53,13 +61,16 @@ const EventDetail = async (id) => {
           confirmButton.textContent = "Eliminar Asistencia";
           confirmButton.addEventListener("click", async () => {
             try {
+              div.appendChild(loadingElement)
               const res = await removeAttendance(id, token);
+              div.removeChild(loadingElement)
               if (res.error) {
                 alert(`Error al eliminar asistencia: ${res.message}`);
               } else {
                 alert("Asistencia eliminada.");
               }
             } catch (error) {
+              div.removeChild(loadingElement)
               console.log(error);
               alert("Hubo un errror al eliminar la asistencia");
             }
@@ -70,9 +81,10 @@ const EventDetail = async (id) => {
           );
           confirmButton.addEventListener("click", async () => {
             try {
+              div.appendChild(loadingElement)
               const res = await confirmAttendance(event._id, token);
               const response = await res.json();
-
+              div.removeChild(loadingElement)
               if (token && response.message === "Asistencia ya confirmada") {
                 alert("Ya has confirmado tu asistencia a este evento.");
               } else if (response.error) {
@@ -83,11 +95,13 @@ const EventDetail = async (id) => {
                 alert("Asistencia confirmada.");
               }
             } catch (error) {
+              div.removeChild(loadingElement)
               console.log("Error del servidor al confirmar asistencia", error);
             }
           });
         }
       } catch (error) {
+        div.removeChild(loadingElement)
         console.error("Error al verificar asistencia:", error);
         alert("Hubo un error al verificar la asistencia.");
       }
@@ -95,6 +109,7 @@ const EventDetail = async (id) => {
 
     checkAttendance();
   } catch (error) {
+    div.removeChild(loadingElement)
     console.log(error);
     eventDetail.innerHTML = "<p>Error al cargar los detalles del evento.</p>";
   }
