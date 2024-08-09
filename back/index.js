@@ -33,7 +33,8 @@ app.use("*", (req, res, next) =>{
     return res.status(404).json("Route not found")
 })
 
+const port = "https://bootcamp-project-10-2.vercel.app/"
 
-app.listen(3000, () => {
+app.listen(port, () => {
     console.log("Servidor levantado en: http://localhost:3000");
 })
